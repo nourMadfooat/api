@@ -121,11 +121,12 @@
       <artifactId>postgresql</artifactId>
       <version>42.2.18</version>
     </dependency>
-<!--      <dependency>-->
-<!--          <groupId>org.codehaus.plexus</groupId>-->
-<!--          <artifactId>plexus-container-default</artifactId>-->
-<!--        <version>1.0-alpha-30</version>-->
-<!--      </dependency>-->
+
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-rx-java2</artifactId>
+      <version>4.0.3</version>
+    </dependency>
   </dependencies>
 
   <build>

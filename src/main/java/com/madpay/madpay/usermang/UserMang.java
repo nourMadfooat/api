@@ -30,13 +30,15 @@ private final PgPool db;
   public void start() {
   vertx.deployVerticle(new Login(db));
   vertx.deployVerticle(new Signup(db));
+  vertx.deployVerticle(new OTPReq(db));
 
   api.post("/login").handler(this::loginHandler);
-  api.post("/signup").handler(this::signup);
+  api.post("/signup").handler(this::signupHandler);
+  api.post("/OTPReq").handler(this::otpReqHandler);
 
   }
 
-  private void signup(RoutingContext context) {
+  private void signupHandler(RoutingContext context) {
     doReq(context, "Signup");
   }
 
@@ -44,11 +46,16 @@ private final PgPool db;
     doReq(context, "Login.vertx.addr");
   }
 
+  private void otpReqHandler(RoutingContext context) {
+    doReq(context, "OtpReq");
+  }
+
 
   private void doReq(RoutingContext context , String address) {
     JsonObject message = context.getBodyAsJson();
     vertx.eventBus().request(address, message, reply -> {
       JsonObject res = new JsonObject((String) reply.result().body());
+      LOG.debug((String) reply.result().body());
       int statusCode = Integer.parseInt(res.getString("statusCode"));
       context.request().response()
         .setStatusCode(statusCode)

@@ -23,9 +23,9 @@ public class MainVerticle extends AbstractVerticle {
   public static void main(String[] args) {
     var vertx = Vertx.vertx();
     vertx.exceptionHandler(error ->
-      LOG.error("Unhandled:", error)
+      LOG.error("Unhandled: ", error)
     );
-    vertx.deployVerticle(MainVerticle.class.getName(),
+    vertx.deployVerticle(MainVerticle .class.getName(),
       new DeploymentOptions().setInstances(avilableProcessors()))
       .onFailure(err ->{
         LOG.error("Failed to deploy: {}",err);

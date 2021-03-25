@@ -31,7 +31,6 @@ private final PgPool db;
         handler.reply(res.result().toString());
       });
     });
-
     super.start(startPromise);
   }
 
