@@ -56,6 +56,7 @@ private final PgPool db;
     vertx.eventBus().request(address, message, reply -> {
       JsonObject res = new JsonObject((String) reply.result().body());
       LOG.debug((String) reply.result().body());
+      LOG.debug("res: {}", res.getString("statusCode"));
       int statusCode = Integer.parseInt(res.getString("statusCode"));
       context.request().response()
         .setStatusCode(statusCode)

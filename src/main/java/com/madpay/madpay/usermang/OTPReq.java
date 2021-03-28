@@ -16,8 +16,6 @@ import java.util.UUID;
 
 public class OTPReq extends AbstractVerticle {
   private static final Logger LOG = LoggerFactory.getLogger(Signup.class);
-  private Promise<Void> validateOTP = Promise.promise();
-  private Promise<Void> createOtp = Promise.promise();
 
   JsonObject response = new JsonObject();
   JsonObject body = new JsonObject();
@@ -29,9 +27,13 @@ public class OTPReq extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) throws Exception {
-//    super.start(startPromise);
+    super.start(startPromise);
     EventBus eventBus = vertx.eventBus();
     eventBus.consumer("OtpReq", handler -> {
+
+      Promise<Void> validateOTP = Promise.promise();
+      Promise<Void> createOtp = Promise.promise();
+
       vertx.executeBlocking(promise -> {
         validateOtpFunc(validateOTP, promise);
         final Future<Void> futureValidateOtp = validateOTP.future();
@@ -50,13 +52,13 @@ public class OTPReq extends AbstractVerticle {
 
   private void validateOtpFunc(Promise<Void> validateOTP, Promise<Object> promise) {
     LOG.debug("in First Promises---------------------------------------");
-    String selectStatmennt = "SELECT * FROM public.\"twilio\"\n" +
+    String selectStatement = "SELECT * FROM public.\"twilio\"\n" +
       "WHERE \"phone\"='"+body.getString("phone")+"' " +
       "AND \"countryCode\"='"+ body.getString("countryCode") +"' "+
       "AND \"isUsed\"=false "+
       "AND AGE('"+ LocalDateTime.now()+"',\"createdOn\") <= '00:02:00'";
 
-    db.query(selectStatmennt)
+    db.query(selectStatement)
       .execute()
       .onFailure(err -> {
         LOG.debug("Something went wrong: {}", err);
@@ -67,7 +69,7 @@ public class OTPReq extends AbstractVerticle {
           response.put("statusCode",404);
           response.put("message","Please Wait to our SMS OTP");
         }
-        this.validateOTP.complete();
+        validateOTP.complete();
       });
   }
 
@@ -75,12 +77,12 @@ public class OTPReq extends AbstractVerticle {
     LOG.debug("in 2nd Promises---------------------------------------");
     UUID uuid = UUID.randomUUID();
 
-    String selectStatmennt = "INSERT INTO public.twilio(\n" +
+    String selectStatement = "INSERT INTO public.twilio(\n" +
       "\tid, code, \"isUsed\", \"createdOn\", \"updatedOn\", phone, \"userId\", \"countryCode\")\n" +
       "\tVALUES ('"+ uuid +"' , '123456', false, '"+ LocalDateTime.now()+"', '"+LocalDateTime.now()+"', '"+body.getString("phone")+"'"+
       ", NULL , '"+ body.getString("countryCode") +"');";
 
-    db.query(selectStatmennt)
+    db.query(selectStatement)
       .execute()
       .onFailure(err -> {
         promise.fail("Something went wrong");

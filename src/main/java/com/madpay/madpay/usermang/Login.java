@@ -38,9 +38,9 @@ private final PgPool db;
     JsonObject response = new JsonObject();
 
     JsonObject body = (JsonObject) handler.body();
-    String selectStatmennt = "SELECT * FROM public.\"user\"\n" +
+    String selectStatement = "SELECT * FROM public.\"user\"\n" +
       "WHERE \"phone\"='"+body.getString("phone")+"'";
-    db.query(selectStatmennt)
+    db.query(selectStatement)
       .execute()
       .onFailure(err -> {
         failuerDb(promise, response, err);

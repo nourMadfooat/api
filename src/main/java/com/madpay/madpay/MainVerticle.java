@@ -9,6 +9,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.PoolOptions;
@@ -33,9 +34,6 @@ public class MainVerticle extends AbstractVerticle {
       .onSuccess(ar ->{
         LOG.info("Deployed {} with id {}!", MainVerticle.class.getSimpleName(), ar);
       });
-//    .compose(next ->migrateDatabase(vertx))
-//      .onFailure(err -> LOG.error("Error In Migration Database {}",err ))
-//    .onSuccess(id -> LOG.info("Migration Id {}", id));
 
   }
 

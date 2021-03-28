@@ -180,6 +180,22 @@
           </arguments>
         </configuration>
       </plugin>
+
+    <plugin>
+      <groupId>com.google.cloud.tools</groupId>
+      <artifactId>jib-maven-plugin</artifactId>
+      <version>1.8.0</version>
+      <configuration>
+        <from>
+          <image>amazoncorrecto:8u232</image>
+        </from>
+        <to>
+          <image>
+            localhost:5000/$
+          </image>
+        </to>
+      </configuration>
+    </plugin>
     </plugins>
   </build>
 
