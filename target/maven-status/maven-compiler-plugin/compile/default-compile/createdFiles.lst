@@ -13,9 +13,9 @@ com/madpay/madpay/configLoader/DbConfig.class
 com/madpay/madpay/config/messages.class
 com/madpay/madpay/usermang/Signup.class
 com/madpay/madpay/AuthSystem/AuthSystem.class
-com/madpay/madpay/configLoader/BrokerConfig.class
 com/madpay/madpay/helper/AuthHelper.class
+com/madpay/madpay/configLoader/BrokerConfig.class
 com/madpay/madpay/config/messages$UserRouts.class
 com/madpay/madpay/configLoader/ConfigLoader.class
-com/madpay/madpay/config/messages$AdminRouts.class
 com/madpay/madpay/config/messages$StatusCode.class
+com/madpay/madpay/config/messages$AdminRouts.class

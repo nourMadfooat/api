@@ -24,7 +24,7 @@ private final PgPool db;
   public void start(Promise<Void> startPromise) throws Exception {
     EventBus eventBus = vertx.eventBus();
 
-    eventBus.consumer("Login.vertx.addr", handler -> {
+    eventBus.consumer("Login", handler -> {
       vertx.executeBlocking(promise -> {
         applyLogin(handler, promise);
       }, res -> {
@@ -39,7 +39,8 @@ private final PgPool db;
 
     JsonObject body = (JsonObject) handler.body();
     String selectStatement = "SELECT * FROM public.\"user\"\n" +
-      "WHERE \"phone\"='"+body.getString("phone")+"'";
+      "WHERE \"phone\"='"+body.getString("phone")+"'"+
+      " AND \"country\"='"+body.getString("countryCode")+"'";
     db.query(selectStatement)
       .execute()
       .onFailure(err -> {

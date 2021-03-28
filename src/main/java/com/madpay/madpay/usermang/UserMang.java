@@ -31,11 +31,17 @@ private final PgPool db;
   vertx.deployVerticle(new Login(db));
   vertx.deployVerticle(new Signup(db));
   vertx.deployVerticle(new OTPReq(db));
+  vertx.deployVerticle(new IsExist(db));
 
   api.post("/login").handler(this::loginHandler);
   api.post("/signup").handler(this::signupHandler);
   api.post("/OTPReq").handler(this::otpReqHandler);
+  api.post("/isExist").handler(this::isExistHandler);
 
+  }
+
+  private void isExistHandler(RoutingContext context) {
+    doReq(context, "IsExist");
   }
 
   private void signupHandler(RoutingContext context) {
@@ -43,7 +49,7 @@ private final PgPool db;
   }
 
   private void loginHandler(RoutingContext context) {
-    doReq(context, "Login.vertx.addr");
+    doReq(context, "Login");
   }
 
   private void otpReqHandler(RoutingContext context) {

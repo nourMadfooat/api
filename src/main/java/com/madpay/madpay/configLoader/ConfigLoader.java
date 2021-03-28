@@ -26,7 +26,7 @@ public class ConfigLoader {
   public static final String DB_PASSWORD = "DB_PASSWORD";
   static final List<String> EXPOSED_ENVIROMENT_VARIBLES =
     Arrays.asList(SERVER_PORT, DB_HOST, DB_PORT, DB_DATABASE, DB_USER,DB_PASSWORD);
-
+//  SERVER_PORT=8888;DB_HOST=localhost;DB_PORT=5432;DB_DATABASE=madpay;DB_USER=nour;DB_PASSWORD=123456a
   public static Future<BrokerConfig> load(Vertx vertx){
     final var exposedKeys = new JsonArray();
     EXPOSED_ENVIROMENT_VARIBLES.forEach(exposedKeys::add);
