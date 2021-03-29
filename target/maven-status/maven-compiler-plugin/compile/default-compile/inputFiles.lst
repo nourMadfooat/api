@@ -5,9 +5,11 @@
 /home/nour/work/api/api/src/main/java/com/madpay/madpay/helper/AuthHelper.java
 /home/nour/work/api/api/src/main/java/com/madpay/madpay/config/messages.java
 /home/nour/work/api/api/src/main/java/com/madpay/madpay/helper/HashingPassword.java
+/home/nour/work/api/api/src/main/java/com/madpay/madpay/usermang/IsExist.java
 /home/nour/work/api/api/src/main/java/com/madpay/madpay/flywayMigration/FlywayMigration.java
 /home/nour/work/api/api/src/main/java/com/madpay/madpay/usermang/Signup.java
 /home/nour/work/api/api/src/main/java/com/madpay/madpay/configLoader/ConfigLoader.java
 /home/nour/work/api/api/src/main/java/com/madpay/madpay/configLoader/DbConfig.java
 /home/nour/work/api/api/src/main/java/com/madpay/madpay/configLoader/BrokerConfig.java
 /home/nour/work/api/api/src/main/java/com/madpay/madpay/MainVerticle.java
+/home/nour/work/api/api/src/main/java/com/madpay/madpay/usermang/CreatePassword.java

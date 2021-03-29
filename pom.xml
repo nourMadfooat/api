@@ -130,7 +130,21 @@
   </dependencies>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>3.0.0-M1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.7</version>
+      </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${maven-compiler-plugin.version}</version>
@@ -182,9 +196,12 @@
       </plugin>
 
     <plugin>
+<!--      <groupId>com.google.cloud.tools</groupId>-->
+<!--      <artifactId>jib-maven-plugin</artifactId>-->
+<!--      <version>2.8.0</version>-->
       <groupId>com.google.cloud.tools</groupId>
       <artifactId>jib-maven-plugin</artifactId>
-      <version>2.8.0</version>
+      <version>1.8.0</version>
       <configuration>
         <from>
           <image>amazoncorretto:8u232</image>
@@ -196,7 +213,8 @@
         </to>
         <container>
           <mainClass>
-            ${main.verticle}
+<!--            ${main.verticle}-->
+            com.madpay.madpay.MainVerticle
           </mainClass>
           <jvmFlags>
             -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.SLF4JLogDelegateFactory

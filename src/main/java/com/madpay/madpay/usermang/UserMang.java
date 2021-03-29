@@ -36,6 +36,7 @@ private final PgPool db;
   api.post("/login").handler(this::loginHandler);
   api.post("/signup").handler(this::signupHandler);
   api.post("/OTPReq").handler(this::otpReqHandler);
+    api.post("/createPassword").handler(this::createPassword);
   api.post("/isExist").handler(this::isExistHandler);
 
   }
@@ -54,6 +55,10 @@ private final PgPool db;
 
   private void otpReqHandler(RoutingContext context) {
     doReq(context, "OtpReq");
+  }
+
+  private void createPassword(RoutingContext context) {
+    doReq(context, "createPassword");
   }
 
 

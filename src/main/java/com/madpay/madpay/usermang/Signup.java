@@ -57,15 +57,15 @@ public class Signup extends AbstractVerticle {
           findUserFunc(handler, findUser, promise);
           final Future<Void>  futureFindUser = findUser.future();
           final Future<Void>  futureUserValidatePhone = userValidatePhone.future();
-          final Future<Void>  futureHashPassword = hashPassword.future();
+//          final Future<Void>  futureHashPassword = hashPassword.future();
           final Future<Void>  futureCreateUser = createUser.future();
           final Future<Void>  futureUpdateTwilio = updateTwilio.future();
 
 
           futureFindUser.onSuccess(firstSuc -> userValidatePhoneFunc(handler, userValidatePhone, promise));
-          futureUserValidatePhone.onSuccess(firstSuc -> hashPasswordFunc(handler, hashPassword, promise));
+          futureUserValidatePhone.onSuccess(firstSuc -> createUserFunc(handler, createUser, promise));
 
-          futureHashPassword.onSuccess(firstSuc ->createUserFunc(handler, createUser, promise));
+//          futureHashPassword.onSuccess(firstSuc ->createUserFunc(handler, createUser, promise));
           futureCreateUser.onSuccess(firstSuc -> updateTwilioFunc(handler, updateTwilio, promise));
           futureUpdateTwilio.onSuccess(firstSuc -> promise.complete(response));
 
@@ -154,7 +154,7 @@ public class Signup extends AbstractVerticle {
   "\"lastLogin\", \"isDeleted\", \"isComplete\", email, \"createdAtOn\", \"updatedOn\", \"isActive\", \"fingerPrint\", \"isValidated\")"+
     "VALUES ("+
       "NULL,"+
-      "'"+ hash +"',"+
+      " NULL,"+
       "'"+ uuid +"',"+
       "'"+ body.getString("phone") + "',"+
       "'"+body.getString("countryCode")+"',"+
