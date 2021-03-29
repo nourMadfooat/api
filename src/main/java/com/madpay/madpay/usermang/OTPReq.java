@@ -52,7 +52,7 @@ public class OTPReq extends AbstractVerticle {
 
   private void validateOtpFunc(Promise<Void> validateOTP, Promise<Object> promise) {
     LOG.debug("in First Promises---------------------------------------");
-    String selectStatement = "SELECT * FROM public.\"twilio\"\n" +
+    String selectStatement = "SELECT * FROM public.\"customerotp\"\n" +
       "WHERE \"phone\"='"+body.getString("phone")+"' " +
       "AND \"countryCode\"='"+ body.getString("countryCode") +"' "+
       "AND \"isUsed\"=false "+
@@ -77,7 +77,7 @@ public class OTPReq extends AbstractVerticle {
     LOG.debug("in 2nd Promises---------------------------------------");
     UUID uuid = UUID.randomUUID();
 
-    String selectStatement = "INSERT INTO public.twilio(\n" +
+    String selectStatement = "INSERT INTO public.customerotp(\n" +
       "\tid, code, \"isUsed\", \"createdOn\", \"updatedOn\", phone, \"userId\", \"countryCode\")\n" +
       "\tVALUES ('"+ uuid +"' , '123456', false, '"+ LocalDateTime.now()+"', '"+LocalDateTime.now()+"', '"+body.getString("phone")+"'"+
       ", NULL , '"+ body.getString("countryCode") +"');";
@@ -85,7 +85,10 @@ public class OTPReq extends AbstractVerticle {
     db.query(selectStatement)
       .execute()
       .onFailure(err -> {
-        promise.fail("Something went wrong");
+        LOG.debug("error: {}",err);
+        response.put("statusCode", "404");
+        response.put("message","Something went wrong");
+        promise.complete(response);
       })
       .onSuccess(res ->{
         if(res.rowCount() >= 1 )

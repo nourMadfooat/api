@@ -32,11 +32,12 @@ private final PgPool db;
   vertx.deployVerticle(new Signup(db));
   vertx.deployVerticle(new OTPReq(db));
   vertx.deployVerticle(new IsExist(db));
+  vertx.deployVerticle(new CreatePassword(db));
 
   api.post("/login").handler(this::loginHandler);
   api.post("/signup").handler(this::signupHandler);
   api.post("/OTPReq").handler(this::otpReqHandler);
-    api.post("/createPassword").handler(this::createPassword);
+  api.post("/createPassword").handler(this::createPassword);
   api.post("/isExist").handler(this::isExistHandler);
 
   }
@@ -57,9 +58,7 @@ private final PgPool db;
     doReq(context, "OtpReq");
   }
 
-  private void createPassword(RoutingContext context) {
-    doReq(context, "createPassword");
-  }
+  private void createPassword(RoutingContext context) { doReq(context, "CreatePassword"); }
 
 
   private void doReq(RoutingContext context , String address) {

@@ -65,7 +65,7 @@ public class MainVerticle extends AbstractVerticle {
 
     final Router api = Router.router(vertx);
     api.route()
-      .handler(CorsHandler.create("*"))
+//      .handler(CorsHandler.create("*"))
       .handler(BodyHandler.create())
       .failureHandler(handlerFailure());
 //    UserMang.login(api, db);

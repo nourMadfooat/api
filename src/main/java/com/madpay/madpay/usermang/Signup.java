@@ -50,7 +50,7 @@ public class Signup extends AbstractVerticle {
       Promise<Void> userValidatePhone = Promise.promise();
       Promise<Void> hashPassword = Promise.promise();
       Promise<Void> createUser = Promise.promise();
-      Promise<Void> updateTwilio = Promise.promise();
+      Promise<Void> updateCustomerOTP = Promise.promise();
 
 
         vertx.executeBlocking(promise -> {
@@ -59,15 +59,15 @@ public class Signup extends AbstractVerticle {
           final Future<Void>  futureUserValidatePhone = userValidatePhone.future();
 //          final Future<Void>  futureHashPassword = hashPassword.future();
           final Future<Void>  futureCreateUser = createUser.future();
-          final Future<Void>  futureUpdateTwilio = updateTwilio.future();
+          final Future<Void>  futureUpdateCustomerOTP = updateCustomerOTP.future();
 
 
           futureFindUser.onSuccess(firstSuc -> userValidatePhoneFunc(handler, userValidatePhone, promise));
           futureUserValidatePhone.onSuccess(firstSuc -> createUserFunc(handler, createUser, promise));
 
 //          futureHashPassword.onSuccess(firstSuc ->createUserFunc(handler, createUser, promise));
-          futureCreateUser.onSuccess(firstSuc -> updateTwilioFunc(handler, updateTwilio, promise));
-          futureUpdateTwilio.onSuccess(firstSuc -> promise.complete(response));
+          futureCreateUser.onSuccess(firstSuc -> updateCustomerOTPFunc(handler, updateCustomerOTP, promise));
+          futureUpdateCustomerOTP.onSuccess(firstSuc -> promise.complete(response));
 
         },res -> {
           LOG.debug("response: {}",res.result().toString());
@@ -103,7 +103,7 @@ public class Signup extends AbstractVerticle {
   }
 
   private void userValidatePhoneFunc(Message<Object> handler, Promise userValidatePhone, Promise promise) {
-    String selectStatement = "SELECT * FROM public.\"twilio\"\n" +
+    String selectStatement = "SELECT * FROM public.\"customerotp\"\n" +
       "WHERE \"phone\"='"+body.getString("phone")+"' " +
       "AND \"countryCode\"='"+ body.getString("countryCode") +"' "+
       "AND \"code\"='"+ body.getString("code") +"' "+
@@ -151,7 +151,8 @@ public class Signup extends AbstractVerticle {
 
     String insertStatement = "INSERT INTO public.\"user\"("+
       "username, password, \"userId\", phone, country, \"userToken\","+
-  "\"lastLogin\", \"isDeleted\", \"isComplete\", email, \"createdAtOn\", \"updatedOn\", \"isActive\", \"fingerPrint\", \"isValidated\")"+
+  "\"lastLogin\", \"isDeleted\", \"isComplete\", email, \"createdAtOn\", \"updatedOn\","+
+      " \"isActive\", \"fingerPrint\", \"isValidated\" , \"userRole\",\"hasPassword\")"+
     "VALUES ("+
       "NULL,"+
       " NULL,"+
@@ -167,10 +168,14 @@ public class Signup extends AbstractVerticle {
       "'"+LocalDateTime.now()+"',"+
       "false,"+
       "'"+body.getString("fingerPrint")+"',"+
-      "true)";
+      "true, "+
+      "'user', "+
+      "false"+
+    ")";
     db.query(insertStatement)
       .execute()
       .onFailure(err -> {
+        LOG.debug("err: {}", err);
         response.put("statusCode","404");
         response.put("message","Something went wrong");
         promise.complete(response);
@@ -186,8 +191,8 @@ public class Signup extends AbstractVerticle {
       });
   }
 
-  private void updateTwilioFunc(Message<Object> handler, Promise updateTwilio, Promise promise) {
-    String updateStatement = "UPDATE public.twilio\n" +
+  private void updateCustomerOTPFunc(Message<Object> handler, Promise updateCustomerOTP, Promise promise) {
+    String updateStatement = "UPDATE public.customerotp\n" +
       "\tSET \"isUsed\"=true,\"updatedOn\"='"+LocalDateTime.now()+"', \"userId\"='"+uuid+"'\n" +
       "\tWHERE phone="+ body.getString("phone") +
       " AND  \"countryCode\"= '"+body.getString("countryCode")+"';";
@@ -199,7 +204,7 @@ public class Signup extends AbstractVerticle {
         promise.complete(response);
       })
       .onSuccess(res -> {
-        updateTwilio.complete();
+        updateCustomerOTP.complete();
       });
   }
 
