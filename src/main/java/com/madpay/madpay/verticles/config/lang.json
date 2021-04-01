@@ -1,0 +1,11 @@
+{
+  "public": [
+    "/isExist",
+    "/OTPReq",
+    "/signUp"
+  ],
+  "private": [
+    "/uploadId",
+    "/login"
+  ]
+}

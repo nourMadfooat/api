@@ -1,9 +1,10 @@
 package com.madpay.madpay;
 
-import com.madpay.madpay.configLoader.BrokerConfig;
-import com.madpay.madpay.configLoader.ConfigLoader;
-import com.madpay.madpay.flywayMigration.FlywayMigration;
-import com.madpay.madpay.usermang.UserMang;
+import com.madpay.madpay.verticles.AuthSystem.AuthSystem;
+import com.madpay.madpay.verticles.configLoader.BrokerConfig;
+import com.madpay.madpay.verticles.configLoader.ConfigLoader;
+import com.madpay.madpay.verticles.flywayMigration.FlywayMigration;
+import com.madpay.madpay.verticles.usermang.UserMang;
 import io.vertx.core.*;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
@@ -65,12 +66,20 @@ public class MainVerticle extends AbstractVerticle {
 
     final Router api = Router.router(vertx);
     api.route()
-//      .handler(CorsHandler.create("*"))
+      .handler(rtx ->{
+        LOG.debug("in Midelware ");
+        vertx.executeBlocking(promise -> {
+          LOG.debug(rtx.request().path());
+          AuthSystem.getAuthUser(db);
+        }, res -> {
+          rtx.next();
+        });
+      })
+//    .handler(CorsHandler.create("*"))
       .handler(BodyHandler.create())
       .failureHandler(handlerFailure());
-//    UserMang.login(api, db);
 
-//
+
     vertx.deployVerticle(new UserMang(api, db))
       .onFailure(err ->{
         LOG.error("Failed to deploy: {}",err);
@@ -116,7 +125,7 @@ public class MainVerticle extends AbstractVerticle {
       LOG.error("Router Error: {}", err.failure());
       err.response()
         .setStatusCode(500)
-        .end(new JsonObject().put("message", "something went wrong :").toBuffer());
+        .end(new JsonObject().put("message", "something went wrong : "+err.failure()).toBuffer());
     };
   }
 }
